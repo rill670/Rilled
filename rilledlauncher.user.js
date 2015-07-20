@@ -1,13 +1,13 @@
 // ==UserScript==
-// @name        AposLauncher
-// @namespace   AposLauncher
+// @name        Rilled
+// @namespace   Rilled
 // @include     http://agar.io/*
-// @version     3.052
+// @version     0.1
 // @grant       none
-// @author      http://www.twitch.tv/apostolique
+// @author      
 // ==/UserScript==
 
-var aposLauncherVersion = 3.052;
+var rilledLauncherVersion = 0.1;
 
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
@@ -20,7 +20,7 @@ Array.prototype.peek = function() {
 var sha = "efde0488cc2cc176db48dd23b28a20b90314352b";
 function getLatestCommit() {
     window.jQuery.ajax({
-            url: "https://api.github.com/repos/apostolique/Agar.io-bot/git/refs/heads/master",
+            url: "https://api.github.com/repos/rill670/Rilled/git/refs/heads/master",
             cache: false,
             dataType: "jsonp"
         }).done(function(data) {
@@ -40,17 +40,17 @@ function getLatestCommit() {
                 window.jQuery("#" + prefix + "Dialog").show();
             }
 
-            window.jQuery.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
+            window.jQuery.get('https://raw.githubusercontent.com/rill670/Rilled/master/rilledlauncher.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
                 var latestVersion = data.replace(/(\r\n|\n|\r)/gm, "");
                 latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
 
                 latestVersion = parseFloat(latestVersion + 0.0000);
-                var myVersion = parseFloat(aposLauncherVersion + 0.0000);
+                var myVersion = parseFloat(rilledLauncherVersion + 0.0000);
 
                 if (latestVersion > myVersion) {
-                    update("aposLauncher", "launcher.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/" + sha + "/launcher.user.js/");
+                    update("aposLauncher", "launcher.user.js", "https://github.com/rill670/Rilled/blob/" + sha + "/rilledlauncher.user.js/");
                 }
-                console.log('Current launcher.user.js Version: ' + myVersion + " on Github: " + latestVersion);
+                console.log('Current rilledlauncher.user.js Version: ' + myVersion + " on Github: " + latestVersion);
             });
 
         }).fail(function() {});
