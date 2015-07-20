@@ -56,7 +56,7 @@ function getLatestCommit() {
                 
                 if(latestVersion > myVersion)
                 {
-                    update("aposBot", "bot.user.js", "https://github.com/rill670/Rilled/blob/" + sha + "/rilledbot.user.js/");
+                    update("rilledBot", "rilledbot.user.js", "https://github.com/rill670/Rilled/blob/" + sha + "/rilledbot.user.js/");
                 }
                 console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
             });
@@ -65,10 +65,10 @@ function getLatestCommit() {
 }
 getLatestCommit();
 
-console.log("Running Apos Bot!");
+console.log("Running Rilled!");
 (function(f, g) {
     var splitDistance = 710;
-    console.log("Apos Bot!");
+    console.log("Rilled!");
 
     if (f.botList == null) {
         f.botList = [];
