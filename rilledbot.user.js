@@ -1,13 +1,13 @@
 // ==UserScript==
-// @name        AposBot
-// @namespace   AposBot
+// @name        Rilled
+// @namespace   Rilled
 // @include     http://agar.io/*
-// @version     3.551
+// @version     0.1
 // @grant       none
-// @author      http://www.twitch.tv/apostolique
+// @author      
 // ==/UserScript==
 
-var aposBotVersion = 3.551;
+var rilledBotVersion = 0.1;
 
 //TODO: Team mode
 //      Detect when people are merging
@@ -27,7 +27,7 @@ Array.prototype.peek = function() {
 var sha = "efde0488cc2cc176db48dd23b28a20b90314352b";
 function getLatestCommit() {
     window.jQuery.ajax({
-            url: "https://api.github.com/repos/apostolique/Agar.io-bot/git/refs/heads/master",
+            url: "https://api.github.com/repos/rill670/Rilled/git/refs/heads/master",
             cache: false,
             dataType: "jsonp"
         }).done(function(data) {
@@ -47,16 +47,16 @@ function getLatestCommit() {
                 window.jQuery("#" + prefix + "Dialog").show();
             }
 
-            $.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
+            $.get('https://raw.githubusercontent.com/rill670/Rilled/master/rilledbot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
                 var latestVersion = data.replace(/(\r\n|\n|\r)/gm,"");
                 latestVersion = latestVersion.substring(latestVersion.indexOf("// @version")+11,latestVersion.indexOf("// @grant"));
 
                 latestVersion = parseFloat(latestVersion + 0.0000);
-                var myVersion = parseFloat(aposBotVersion + 0.0000); 
+                var myVersion = parseFloat(rilledBotVersion + 0.0000); 
                 
                 if(latestVersion > myVersion)
                 {
-                    update("aposBot", "bot.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/" + sha + "/bot.user.js/");
+                    update("aposBot", "bot.user.js", "https://github.com/rill670/Rilled/blob/" + sha + "/rilledbot.user.js/");
                 }
                 console.log('Current bot.user.js Version: ' + myVersion + " on Github: " + latestVersion);
             });
@@ -82,10 +82,10 @@ console.log("Running Apos Bot!");
         }
     }
 
-    f.botList.push(["AposBot " + aposBotVersion, findDestination]);
+    f.botList.push(["Rilled " + rilledBotVersion, findDestination]);
 
     var bList = g('#bList');
-    g('<option />', {value: (f.botList.length - 1), text: "AposBot"}).appendTo(bList);
+    g('<option />', {value: (f.botList.length - 1), text: "Rilled"}).appendTo(bList);
 
     //Given an angle value that was gotten from valueAndleBased(),
     //returns a new value that scales it appropriately.
