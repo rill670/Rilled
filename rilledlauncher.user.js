@@ -48,7 +48,7 @@ function getLatestCommit() {
                 var myVersion = parseFloat(rilledLauncherVersion + 0.0000);
 
                 if (latestVersion > myVersion) {
-                    update("aposLauncher", "launcher.user.js", "https://github.com/rill670/Rilled/blob/" + sha + "/rilledlauncher.user.js/");
+                    update("rilledLauncher", "rilledlauncher.user.js", "https://github.com/rill670/Rilled/blob/" + sha + "/rilledlauncher.user.js/");
                 }
                 console.log('Current rilledlauncher.user.js Version: ' + myVersion + " on Github: " + latestVersion);
             });
@@ -1297,7 +1297,7 @@ console.log("Running Bot Launcher!");
                 dArc = [],
                 dText = [],
                 lines = [],
-                names = ["NotReallyABot"],
+                names = ["Confederate"],
                 originalName = names[Math.floor(Math.random() * names.length)],
                 sessionScore = 0,
                 serverIP = "",
