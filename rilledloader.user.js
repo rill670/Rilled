@@ -1,19 +1,19 @@
 // ==UserScript==
-// @name        AposLoader
-// @namespace   AposLoader
-// @description Grabs latest versions of the bot scripts automatically.
+// @name        Rilled
+// @namespace   Rilled
+// @description Grabs latest versions of the bot scripts automatically maybe.
 // @include     http://agar.io/
-// @version     1.3
+// @version     0.1
 // @grant       none
-// @author      http://www.twitch.tv/apostolique
+// @author      
 // ==/UserScript==
 
-var aposLoaderVersion = 1.3;
+var rilledLoaderVersion = 0.1;
 
 var sha = "efde0488cc2cc176db48dd23b28a20b90314352b";
 function getLatestCommit() {
     window.jQuery.ajax({
-            url: "https://api.github.com/repos/apostolique/Agar.io-bot/git/refs/heads/master",
+            url: "https://api.github.com/repos/rill670/Rilled/git/refs/heads/master",
             cache: false,
             dataType: "jsonp"
         }).done(function(data) {
@@ -22,22 +22,22 @@ function getLatestCommit() {
             sha = data["data"]["object"]["sha"];
             ;
 
-            window.jQuery.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/launcher.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
+            window.jQuery.get('https://raw.githubusercontent.com/rill670/Rilled/master/rilledlauncher.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
                 var latestVersion = data.replace(/(\r\n|\n|\r)/gm, "");
                 latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
 
                 latestVersion = parseFloat(latestVersion + 0.0000);
-                var script1 = "https://cdn.rawgit.com/Apostolique/Agar.io-bot/" + sha + "/launcher.user.js";
+                var script1 = "https://cdn.rawgit.com/rill670/Rilled/" + sha + "/rilledlauncher.user.js";
                 console.log("Script: " + script1);
                 window.jQuery("body").append('<script type="text/javascript" src="' + script1 + '"></script>');
                 
             });
-            window.jQuery.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/bot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
+            window.jQuery.get('https://raw.githubusercontent.com/rill670/Rilled/master/rilledbot.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
                 var latestVersion = data.replace(/(\r\n|\n|\r)/gm, "");
                 latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
 
                 latestVersion = parseFloat(latestVersion + 0.0000);
-                var script2 = "https://cdn.rawgit.com/Apostolique/Agar.io-bot/" + sha + "/bot.user.js";
+                var script2 = "https://cdn.rawgit.com/rill670/Rilled/" + sha + "/rilledbot.user.js";
                 console.log("Script: " + script2);
                 window.jQuery("body").append('<script type="text/javascript" src="' + script2 + '"></script>');
             });
@@ -54,17 +54,17 @@ function getLatestCommit() {
                 window.jQuery("#" + prefix + "Dialog").show();
             }
 
-            window.jQuery.get('https://raw.githubusercontent.com/Apostolique/Agar.io-bot/master/loader.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
+            window.jQuery.get('https://raw.githubusercontent.com/rill670/Rilled/master/rilledloader.user.js?' + Math.floor((Math.random() * 1000000) + 1), function(data) {
                 var latestVersion = data.replace(/(\r\n|\n|\r)/gm, "");
                 latestVersion = latestVersion.substring(latestVersion.indexOf("// @version") + 11, latestVersion.indexOf("// @grant"));
 
                 latestVersion = parseFloat(latestVersion + 0.0000);
-                var myVersion = parseFloat(aposLoaderVersion + 0.0000);
+                var myVersion = parseFloat(rilledLoaderVersion + 0.0000);
 
                 if (latestVersion > myVersion) {
-                    update("aposLoader", "loader.user.js", "https://github.com/Apostolique/Agar.io-bot/blob/master/loader.user.js/");
+                    update("rilledLoader", "rilledloader.user.js", "https://github.com/rill670/Rilled/blob/master/rilledloader.user.js/");
                 }
-                console.log('Current loader.user.js Version: ' + myVersion + " on Github: " + latestVersion);
+                console.log('Current rilledloader.user.js Version: ' + myVersion + " on Github: " + latestVersion);
             });
         }).fail(function() {});
 }
