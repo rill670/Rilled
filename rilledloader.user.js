@@ -519,7 +519,7 @@ console.log("Running Rilled!");
             var lineRight = followAngle(225, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
-            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
+            //drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
         }
         if (blob.y < f.getMapStartY() + 1000) {
             //TOP
@@ -531,7 +531,7 @@ console.log("Running Rilled!");
             var lineRight = followAngle(315, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
-            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
+            //drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
         }
         if (blob.x > f.getMapEndX() - 1000) {
             //RIGHT
@@ -543,7 +543,7 @@ console.log("Running Rilled!");
             var lineRight = followAngle(45, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
-            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
+            //drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
         }
         if (blob.y > f.getMapEndY() - 1000) {
             //BOTTOM
@@ -555,7 +555,7 @@ console.log("Running Rilled!");
             var lineRight = followAngle(135, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
-            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
+            //drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
         }
 
         return listToUse;
