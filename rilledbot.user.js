@@ -160,13 +160,6 @@ console.log("Running Rilled!");
         return 2;
     }
 
-    function isFood(blob, cell) {
-        if (!cell.isVirus() && compareSize(cell, blob, 1.30) || (cell.size <= 11)) {
-            return true;
-        }
-        return false;
-    }
-
     function isThreat(blob, cell) {
         if (!cell.isVirus() && compareSize(blob, cell, 1.30)) {
             return true;
@@ -180,13 +173,6 @@ console.log("Running Rilled!");
         } else if (cell.isVirus() && cell.color.substring(3,5).toLowerCase() != "ff") {
             return true;
         }
-        return false;
-    }
-
-    function isSplitTarget(blob, cell) {
-        /*if (canSplit(cell, blob)) {
-            return true;
-        }*/
         return false;
     }
 
@@ -228,31 +214,6 @@ console.log("Running Rilled!");
         return [foodList, threatList, virusList, splitTargetList];
     }
 
-    function getAll(blob) {
-        var dotList = [];
-        var player = getPlayer();
-        var interNodes = getMemoryCells();
-
-        dotList = separateListBasedOnFunction(interNodes, blob);
-
-        return dotList;
-    }
-
-    function getAngle(x1, y1, x2, y2) {
-        //Handle vertical and horizontal lines.
-
-        if (x1 == x2) {
-            if (y1 < y2) {
-                return 271;
-                //return 89;
-            } else {
-                return 89;
-            }
-        }
-
-        return (Math.round(Math.atan2(-(y1 - y2), -(x1 - x2)) / Math.PI * 180 + 180));
-    }
-
     function slope(x1, y1, x2, y2) {
         var m = (y1 - y2) / (x1 - x2);
 
@@ -273,75 +234,6 @@ console.log("Running Rilled!");
         var m = slope(x1, y1, x2, y2);
         return (-1) / m;
     }
-
-    //Given a slope and an offset, returns two points on that line.
-    function pointsOnLine(slope, useX, useY, distance) {
-        var b = useY - slope * useX;
-        var r = Math.sqrt(1 + slope * slope);
-
-        var newX1 = (useX + (distance / r));
-        var newY1 = (useY + ((distance * slope) / r));
-        var newX2 = (useX + ((-distance) / r));
-        var newY2 = (useY + (((-distance) * slope) / r));
-
-        return [
-            [newX1, newY1],
-            [newX2, newY2]
-        ];
-    }
-
-    //Using a line formed from point a to b, tells if point c is on S side of that line.
-    function isSideLine(a, b, c) {
-        if ((b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]) > 0) {
-            return true;
-        }
-        return false;
-    }
-	
-    //TODO: Don't let this function do the radius math.
-    function getEdgeLinesFromPoint(blob1, blob2, radius) {
-        var px = blob1.x;
-        var py = blob1.y;
-
-        var cx = blob2.x;
-        var cy = blob2.y;
-
-        //var radius = blob2.size;
-
-        /*if (blob2.isVirus()) {
-            radius = blob1.size;
-        } else if(canSplit(blob1, blob2)) {
-            radius += splitDistance;
-        } else {
-            radius += blob1.size * 2;
-        }*/
-
-        var shouldInvert = false;
-
-        if (computeDistance(px, py, cx, cy) <= radius) {
-            radius = computeDistance(px, py, cx, cy) - 5;
-            shouldInvert = true;
-        }
-
-        var dx = cx - px;
-        var dy = cy - py;
-        var dd = Math.sqrt(dx * dx + dy * dy);
-        var a = Math.asin(radius / dd);
-        var b = Math.atan2(dy, dx);
-
-        var t = b - a
-        var ta = {
-            x: radius * Math.sin(t),
-            y: radius * -Math.cos(t)
-        };
-
-        t = b + a
-        var tb = {
-            x: radius * -Math.sin(t),
-            y: radius * Math.cos(t)
-        };
-    }
-	
 	
     function followAngle(angle, useX, useY, distance) {
         var slope = slopeFromAngle(angle);
@@ -403,176 +295,6 @@ console.log("Running Rilled!");
         }
 
         return listToUse;
-    }
-    
-    function addAngle(listToUse, range) {
-        //#1 Find first open element
-        //#2 Try to add range1 to the list. If it is within other range, don't add it, set a boolean.
-        //#3 Try to add range2 to the list. If it is withing other range, don't add it, set a boolean.
-
-        //TODO: Only add the new range at the end after the right stuff has been removed.
-
-        var startIndex = 1;
-
-        if (listToUse.length > 0 && !listToUse[0][1]) {
-            startIndex = 0;
-        }
-
-        var startMark = getAngleIndex(listToUse, range[0][0]);
-        var startBool = startMark.mod(2) != startIndex;
-
-        var endMark = getAngleIndex(listToUse, range[1][0]);
-        var endBool = endMark.mod(2) != startIndex;
-
-        var removeList = [];
-
-        if (startMark != endMark) {
-            //Note: If there is still an error, this would be it.
-            var biggerList = 0;
-            if (endMark == listToUse.length) {
-                biggerList = 1;
-            }
-
-            for (var i = startMark; i < startMark + (endMark - startMark).mod(listToUse.length + biggerList); i++) {
-                removeList.push((i).mod(listToUse.length));
-            }
-        } else if (startMark < listToUse.length && endMark < listToUse.length) {
-            var startDist = (listToUse[startMark][0] - range[0][0]).mod(360);
-            var endDist = (listToUse[endMark][0] - range[1][0]).mod(360);
-
-            if (startDist < endDist) {
-                for (var i = 0; i < listToUse.length; i++) {
-                    removeList.push(i);
-                }
-            }
-        }
-
-        removeList.sort(function(a, b){return b-a});
-
-        for (var i = 0; i < removeList.length; i++) {
-            listToUse.splice(removeList[i], 1);
-        }
-
-        if (startBool) {
-            listToUse.splice(getAngleIndex(listToUse, range[0][0]), 0, range[0]);
-        }
-        if (endBool) {
-            listToUse.splice(getAngleIndex(listToUse, range[1][0]), 0, range[1]);
-        }
-
-        return listToUse;
-    }
-
-    function findDestination(followMouse) {
-        var player = getPlayer();
-        var interNodes = getMemoryCells();
-
-        if ( /*!toggle*/ 1) {
-            var useMouseX = (getMouseX() - getWidth() / 2 + getX() * getRatio()) / getRatio();
-            var useMouseY = (getMouseY() - getHeight() / 2 + getY() * getRatio()) / getRatio();
-            tempPoint = [useMouseX, useMouseY, 1];
-
-            var tempMoveX = getPointX();
-            var tempMoveY = getPointY();
-
-            var destinationChoices = []; //destination, size, danger
-
-            if (player.length > 0) {
-
-                for (var k = 0; k < player.length; k++) {
-
-                    //console.log("Working on blob: " + k);
-
-                    drawCircle(player[k].x, player[k].y, player[k].size + splitDistance, 5);
-
-                    var allIsAll = getAll(player[k]);
-
-                    var allPossibleFood = allIsAll[0];
-                    var allPossibleThreats = allIsAll[1];
-                    var allPossibleViruses = allIsAll[2];
-
-                    var obstacleList = [];
-
-                    var isSafeSpot = true;
-                    var isMouseSafe = true;
-
-                    //console.log("Looking for enemies!");
-
-                    for (var i = 0; i < allPossibleThreats.length; i++) {
-
-                        var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
-
-                        var splitDangerDistance = allPossibleThreats[i].size + splitDistance + 150;
-
-                        var normalDangerDistance = allPossibleThreats[i].size + 150;
-
-                        var shiftDistance = player[k].size;
-
-                        //console.log("Found distance.");
-
-                        var enemyCanSplit = canSplit(player[k], allPossibleThreats[i]);
-                        
-
-                        //console.log("Removed some food.");
-
-                        if (enemyCanSplit) {
-                            drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, splitDangerDistance, 0);
-                            drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, splitDangerDistance + shiftDistance, 6);
-                        } else {
-                            drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, normalDangerDistance, 3);
-                            drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, normalDangerDistance + shiftDistance, 6);
-                        }
-
-                        if (allPossibleThreats[i].danger && f.getLastUpdate() - allPossibleThreats[i].dangerTimeOut > 1000) {
-
-                            allPossibleThreats[i].danger = false;
-                        }
-                    }
-
-                    //console.log("Done looking for enemies!");
-
-                    var stupidList = [];
-
-                    for (var i = 0; i < allPossibleViruses.length; i++) {
-                        if (player[k].size < allPossibleViruses[i].size) {
-                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, allPossibleViruses[i].size + 10, 3);
-                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, allPossibleViruses[i].size * 2, 6);
-
-                        } else {
-                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size + 50, 3);
-                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size * 2, 6);
-                        }
-                    }
-
-                    //console.log("Added random noob stuff.");
-
-                    var sortedInterList = [];
-                    var sortedObList = [];
-
-                    for (var i = 0; i < obstacleList.length; i++) {
-                        sortedObList = addAngle(sortedObList, obstacleList[i])
-
-                        if (sortedObList.length == 0) {
-                            break;
-                        }
-                    }
-
-                    var offsetI = 0;
-                    var obOffsetI = 1;
-
-                    if (sortedInterList.length > 0 && sortedInterList[0][1]) {
-                        offsetI = 1;
-                    }
-                    if (sortedObList.length > 0 && sortedObList[0][1]) {
-                        obOffsetI = 0;
-                    }
-					
-                    tempPoint[2] = 1;
-
-                    //console.log("Done working on blob: " + i);
-                }
-            }
-        }
     }
 
     function screenToGameX(x) {
