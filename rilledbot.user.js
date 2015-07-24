@@ -465,7 +465,6 @@ console.log("Running Rilled!");
             var lineRight = followAngle(315, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
-            //drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
         }
         if (blob.x > f.getMapEndX() - 1000) {
             //RIGHT
@@ -477,7 +476,6 @@ console.log("Running Rilled!");
             var lineRight = followAngle(45, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
-            //drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
         }
         if (blob.y > f.getMapEndY() - 1000) {
             //BOTTOM
@@ -489,15 +487,10 @@ console.log("Running Rilled!");
             var lineRight = followAngle(135, blob.x, blob.y, 190 + blob.size);
             drawLine(blob.x, blob.y, lineLeft[0], lineLeft[1], 5);
             drawLine(blob.x, blob.y, lineRight[0], lineRight[1], 5);
-            //drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob.x, blob.y, 5);
         }
 
         return listToUse;
     }
-
-    //listToUse contains angles in the form of [angle, boolean].
-    //boolean is true when the range is starting. False when it's ending.
-    //range = [[angle1, true], [angle2, false]]
     
 	//remove
     function getAngleIndex(listToUse, angle) {
@@ -643,9 +636,6 @@ console.log("Running Rilled!");
                     //console.log("Working on blob: " + k);
 
                     drawCircle(player[k].x, player[k].y, player[k].size + splitDistance, 5);
-                    //drawPoint(player[0].x, player[0].y - player[0].size, 3, "" + Math.floor(player[0].x) + ", " + Math.floor(player[0].y));
-
-                    //var allDots = processEverything(interNodes);
 
                     var allIsAll = getAll(player[k]);
 
@@ -689,13 +679,6 @@ console.log("Running Rilled!");
 
                             allPossibleThreats[i].danger = false;
                         }
-
-                        /*if ((enemyCanSplit && enemyDistance < splitDangerDistance) ||
-                            (!enemyCanSplit && enemyDistance < normalDangerDistance)) {
-
-                            allPossibleThreats[i].danger = true;
-                            allPossibleThreats[i].dangerTimeOut = f.getLastUpdate();
-                        }*/
 
                         //console.log("Figured out who was important.");
 
@@ -757,9 +740,6 @@ console.log("Running Rilled!");
                         }
                     }
 
-                    //stupidList.push([[45, true], [135, false]]);
-                    //stupidList.push([[10, true], [200, false]]);
-
                     //console.log("Added random noob stuff.");
 
                     var sortedInterList = [];
@@ -801,51 +781,15 @@ console.log("Running Rilled!");
                         var destination = followAngle(shiftedAngle, player[k].x, player[k].y, distance);
 
                         destinationChoices.push(destination);
-                        //tempMoveX = destination[0];
-                        //tempMoveY = destination[1];
-                        //drawLine(player[k].x, player[k].y, destination[0], destination[1], 1);
                     } else {
                         //If there are no enemies around and no food to eat.
                         destinationChoices.push([tempMoveX, tempMoveY]);
                     }
-
-                    //drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
-                    //drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "" + Math.floor(computeDistance(tempPoint[0], tempPoint[1], I, J)));
-                    //drawLine(tempPoint[0], tempPoint[1], player[0].x, player[0].y, 6);
-                    //console.log("Slope: " + slope(tempPoint[0], tempPoint[1], player[0].x, player[0].y) + " Angle: " + getAngle(tempPoint[0], tempPoint[1], player[0].x, player[0].y) + " Side: " + (getAngle(tempPoint[0], tempPoint[1], player[0].x, player[0].y) - 90).mod(360));
                     tempPoint[2] = 1;
 
                     //console.log("Done working on blob: " + i);
                 }
-
-                //TODO: Find where to go based on destinationChoices.
-                /*var dangerFound = false;
-                for (var i = 0; i < destinationChoices.length; i++) {
-                    if (destinationChoices[i][2]) {
-                        dangerFound = true;
-                        break;
-                    }
-                }
-
-                destinationChoices.sort(function(a, b){return b[1] - a[1]});
-
-                if (dangerFound) {
-                    for (var i = 0; i < destinationChoices.length; i++) {
-                        if (destinationChoices[i][2]) {
-                            tempMoveX = destinationChoices[i][0][0];
-                            tempMoveY = destinationChoices[i][0][1];
-                            break;
-                        }
-                    }
-                } else {
-                    tempMoveX = destinationChoices.peek()[0][0];
-                    tempMoveY = destinationChoices.peek()[0][1];
-                    //console.log("Done " + tempMoveX + ", " + tempMoveY);
-                }*/
             }
-            //console.log("MOVING RIGHT NOW!");
-
-            //console.log("______Never lied ever in my life.");
 
             return destinationChoices;
         }
@@ -857,10 +801,6 @@ console.log("Running Rilled!");
 
     function screenToGameY(y) {
         return (y - getHeight() / 2) / getRatio() + getY();;
-    }
-
-    function drawArc(x_1, y_1, x_2, y_2, x_3, y_3, drawColor) {
-        f.drawArc(x_1, y_1, x_2, y_2, x_3, y_3, drawColor);
     }
 
     function drawLine(x_1, y_1, x_2, y_2, drawColor) {
