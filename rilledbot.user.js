@@ -75,8 +75,6 @@ console.log("Running Rilled!");
         }
     }
 
-    f.botList.push(["Rilled " + rilledBotVersion, findDestination]);
-
     var bList = g('#bList');
     g('<option />', {value: (f.botList.length - 1), text: "Rilled"}).appendTo(bList);
 
