@@ -659,6 +659,8 @@ console.log("Running Rilled!");
                     var isSafeSpot = true;
                     var isMouseSafe = true;
 
+                    var clusterAllFood = clusterFood(allPossibleFood, player[k].size);
+
                     //console.log("Looking for enemies!");
 
                     for (var i = 0; i < allPossibleThreats.length; i++) {
@@ -674,6 +676,12 @@ console.log("Running Rilled!");
                         //console.log("Found distance.");
 
                         var enemyCanSplit = canSplit(player[k], allPossibleThreats[i]);
+                        
+                        for (var j = clusterAllFood.length - 1; j >= 0 ; j--) {
+                            var secureDistance = (enemyCanSplit ? splitDangerDistance : normalDangerDistance);
+                            if (computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, clusterAllFood[j][0], clusterAllFood[j][1]) < secureDistance)
+                                clusterAllFood.splice(j, 1);
+                        }
 
                         //console.log("Removed some food.");
 
@@ -885,7 +893,32 @@ console.log("Running Rilled!");
                     } else if (badAngles.length > 0 && goodAngles == 0) {
                         //TODO: CODE TO HANDLE WHEN THERE IS NO GOOD ANGLE BUT THERE ARE ENEMIES AROUND!!!!!!!!!!!!!
                         destinationChoices.push([tempMoveX, tempMoveY]);
-                    }
+                    } else if (clusterAllFood.length > 0) {
+                        for (var i = 0; i < clusterAllFood.length; i++) {
+                            //console.log("mefore: " + clusterAllFood[i][2]);
+                            //This is the cost function. Higher is better.
+
+                                var clusterAngle = getAngle(clusterAllFood[i][0], clusterAllFood[i][1], player[k].x, player[k].y);
+
+                                clusterAllFood[i][2] = clusterAllFood[i][2] * 6 - computeDistance(clusterAllFood[i][0], clusterAllFood[i][1], player[k].x, player[k].y);
+                                //console.log("Current Value: " + clusterAllFood[i][2]);
+
+                                //(goodAngles[bIndex][1] / 2 - (Math.abs(perfectAngle - clusterAngle)));
+
+                                clusterAllFood[i][3] = clusterAngle;
+
+                                //drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
+                                //console.log("After: " + clusterAllFood[i][2]);
+                        }
+
+                        var bestFoodI = 0;
+                        var bestFood = clusterAllFood[0][2];
+                        for (var i = 1; i < clusterAllFood.length; i++) {
+                            if (bestFood < clusterAllFood[i][2]) {
+                                bestFood = clusterAllFood[i][2];
+                                bestFoodI = i;
+                            }
+                        }
 
                         //console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
 
