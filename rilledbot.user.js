@@ -439,8 +439,8 @@ console.log("Running Rilled!");
     function debugAngle(angle, text) {
         var player = getPlayer();
         var line1 = followAngle(angle, player[0].x, player[0].y, 300);
-        drawLine(player[0].x, player[0].y, line1[0], line1[1], 5);
-        drawPoint(line1[0], line1[1], 5, "" + text);
+        //drawLine(player[0].x, player[0].y, line1[0], line1[1], 5);
+        //drawPoint(line1[0], line1[1], 5, "" + text);
     }
 
     //TODO: Don't let this function do the radius math.
@@ -651,20 +651,6 @@ console.log("Running Rilled!");
 
         var lineLeft = followAngle(leftAngle, blob1.x, blob1.y, 150 + blob1.size - index * 10);
         var lineRight = followAngle(rightAngle, blob1.x, blob1.y, 150 + blob1.size - index * 10);
-
-        if (blob2.isVirus()) {
-            drawLine(blob1.x, blob1.y, lineLeft[0], lineLeft[1], 6);
-            drawLine(blob1.x, blob1.y, lineRight[0], lineRight[1], 6);
-            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob1.x, blob1.y, 6);
-        } else if(getCells().hasOwnProperty(blob2.id)) {
-            drawLine(blob1.x, blob1.y, lineLeft[0], lineLeft[1], 0);
-            drawLine(blob1.x, blob1.y, lineRight[0], lineRight[1], 0);
-            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob1.x, blob1.y, 0);
-        } else {
-            drawLine(blob1.x, blob1.y, lineLeft[0], lineLeft[1], 3);
-            drawLine(blob1.x, blob1.y, lineRight[0], lineRight[1], 3);
-            drawArc(lineLeft[0], lineLeft[1], lineRight[0], lineRight[1], blob1.x, blob1.y, 3);
-        }
 
         return [leftAngle, difference];
     }
@@ -911,8 +897,8 @@ console.log("Running Rilled!");
                     for (var i = 0; i < goodAngles.length; i++) {
                         var line1 = followAngle(goodAngles[i][0], player[k].x, player[k].y, 100 + player[k].size);
                         var line2 = followAngle((goodAngles[i][0] + goodAngles[i][1]).mod(360), player[k].x, player[k].y, 100 + player[k].size);
-                        drawLine(player[k].x, player[k].y, line1[0], line1[1], 1);
-                        drawLine(player[k].x, player[k].y, line2[0], line2[1], 1);
+                        //drawLine(player[k].x, player[k].y, line1[0], line1[1], 1);
+                        //drawLine(player[k].x, player[k].y, line2[0], line2[1], 1);
 
                         drawArc(line1[0], line1[1], line2[0], line2[1], player[k].x, player[k].y, 1);
 
@@ -925,8 +911,8 @@ console.log("Running Rilled!");
                     for (var i = 0; i < obstacleAngles.length; i++) {
                         var line1 = followAngle(obstacleAngles[i][0], player[k].x, player[k].y, 50 + player[k].size);
                         var line2 = followAngle((obstacleAngles[i][0] + obstacleAngles[i][1]).mod(360), player[k].x, player[k].y, 50 + player[k].size);
-                        drawLine(player[k].x, player[k].y, line1[0], line1[1], 6);
-                        drawLine(player[k].x, player[k].y, line2[0], line2[1], 6);
+                        //drawLine(player[k].x, player[k].y, line1[0], line1[1], 6);
+                        //drawLine(player[k].x, player[k].y, line2[0], line2[1], 6);
 
                         drawArc(line1[0], line1[1], line2[0], line2[1], player[k].x, player[k].y, 6);
 
@@ -945,7 +931,7 @@ console.log("Running Rilled!");
                         var destination = followAngle(shiftedAngle, player[k].x, player[k].y, distance);
 
                         destinationChoices.push(destination);
-                        drawLine(player[k].x, player[k].y, destination[0], destination[1], 1);
+                        //drawLine(player[k].x, player[k].y, destination[0], destination[1], 1);
                         //tempMoveX = destination[0];
                         //tempMoveY = destination[1];
 
@@ -966,7 +952,7 @@ console.log("Running Rilled!");
                         var line1 = followAngle(perfectAngle, player[k].x, player[k].y, f.verticalDistance());
 
                         destinationChoices.push(line1);
-                        drawLine(player[k].x, player[k].y, line1[0], line1[1], 7);
+                        //drawLine(player[k].x, player[k].y, line1[0], line1[1], 7);
                         //tempMoveX = line1[0];
                         //tempMoveY = line1[1];
                     } else if (badAngles.length > 0 && goodAngles == 0) {
@@ -1010,7 +996,7 @@ console.log("Running Rilled!");
                         destinationChoices.push(destination);
                         //tempMoveX = destination[0];
                         //tempMoveY = destination[1];
-                        drawLine(player[k].x, player[k].y, destination[0], destination[1], 1);
+                        //drawLine(player[k].x, player[k].y, destination[0], destination[1], 1);
                     } else {
                         //If there are no enemies around and no food to eat.
                         destinationChoices.push([tempMoveX, tempMoveY]);
