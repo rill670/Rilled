@@ -82,23 +82,6 @@ console.log("Running Rilled!");
 
     //Given an angle value that was gotten from valueAndleBased(),
     //returns a new value that scales it appropriately.
-    function paraAngleValue(angleValue, range) {
-        return (15 / (range[1])) * (angleValue * angleValue) - (range[1] / 6);
-    }
-
-    function valueAngleBased(angle, range) {
-        var leftValue = (angle - range[0]).mod(360);
-        var rightValue = (rangeToAngle(range) - angle).mod(360);
-
-        var bestValue = Math.min(leftValue, rightValue);
-
-        if (bestValue <= range[1]) {
-            return paraAngleValue(bestValue, range);
-        }
-        var banana = -1;
-        return banana;
-
-    }
 
     function computeDistance(x1, y1, x2, y2) {
         var xdis = x1 - x2; // <--- FAKE AmS OF COURSE!
@@ -307,18 +290,6 @@ console.log("Running Rilled!");
         ];
     }
 
-    function followAngle(angle, useX, useY, distance) {
-        var slope = slopeFromAngle(angle);
-        var coords = pointsOnLine(slope, useX, useY, distance);
-
-        var side = (angle - 90).mod(360);
-        if (side < 180) {
-            return coords[1];
-        } else {
-            return coords[0];
-        }
-    }
-
     //Using a line formed from point a to b, tells if point c is on S side of that line.
     function isSideLine(a, b, c) {
         if ((b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]) > 0) {
@@ -326,50 +297,7 @@ console.log("Running Rilled!");
         }
         return false;
     }
-
-    //angle range2 is within angle range2
-    //an Angle is a point and a distance between an other point [5, 40]
-    function angleRangeIsWithin(range1, range2) {
-        if (range2[0] == (range2[0] + range2[1]).mod(360)) {
-            return true;
-        }
-        //console.log("r1: " + range1[0] + ", " + range1[1] + " ... r2: " + range2[0] + ", " + range2[1]);
-
-        var distanceFrom0 = (range1[0] - range2[0]).mod(360);
-        var distanceFrom1 = (range1[1] - range2[0]).mod(360);
-
-        if (distanceFrom0 < range2[1] && distanceFrom1 < range2[1] && distanceFrom0 < distanceFrom1) {
-            return true;
-        }
-        return false;
-    }
-
-    function angleRangeIsWithinInverted(range1, range2) {
-        var distanceFrom0 = (range1[0] - range2[0]).mod(360);
-        var distanceFrom1 = (range1[1] - range2[0]).mod(360);
-
-        if (distanceFrom0 < range2[1] && distanceFrom1 < range2[1] && distanceFrom0 > distanceFrom1) {
-            return true;
-        }
-        return false;
-    }
-
-    function angleIsWithin(angle, range) {
-        var diff = (rangeToAngle(range) - angle).mod(360);
-        if (diff >= 0 && diff <= range[1]) {
-            return true;
-        }
-        return false;
-    }
-
-    function rangeToAngle(range) {
-        return (range[0] + range[1]).mod(360);
-    }
-
-    function anglePair(range) {
-        return (range[0] + ", " + rangeToAngle(range) + " range: " + range[1]);
-    }
-
+	
     //TODO: Don't let this function do the radius math.
     function getEdgeLinesFromPoint(blob1, blob2, radius) {
         var px = blob1.x;
@@ -412,21 +340,19 @@ console.log("Running Rilled!");
             x: radius * -Math.sin(t),
             y: radius * Math.cos(t)
         };
+    }
+	
+	
+    function followAngle(angle, useX, useY, distance) {
+        var slope = slopeFromAngle(angle);
+        var coords = pointsOnLine(slope, useX, useY, distance);
 
-        var angleLeft = getAngle(cx + ta.x, cy + ta.y, px, py);
-        var angleRight = getAngle(cx + tb.x, cy + tb.y, px, py);
-        var angleDistance = (angleRight - angleLeft).mod(360);
-
-        if (shouldInvert) {
-            var temp = angleLeft;
-            angleLeft = (angleRight + 180).mod(360);
-            angleRight = (temp + 180).mod(360);
-            angleDistance = (angleRight - angleLeft).mod(360);
+        var side = (angle - 90).mod(360);
+        if (side < 180) {
+            return coords[1];
+        } else {
+            return coords[0];
         }
-
-        return [angleLeft, angleDistance, [cx + tb.x, cy + tb.y],
-            [cx + ta.x, cy + ta.y]
-        ];
     }
 
     function addWall(listToUse, blob) {
@@ -477,21 +403,6 @@ console.log("Running Rilled!");
         }
 
         return listToUse;
-    }
-    
-	//remove
-    function getAngleIndex(listToUse, angle) {
-        if (listToUse.length == 0) {
-            return 0;
-        }
-
-        for (var i = 0; i < listToUse.length; i++) {
-            if (angle <= listToUse[i][0]) {
-                return i;
-            }
-        }
-
-        return listToUse.length;
     }
     
     function addAngle(listToUse, range) {
@@ -550,56 +461,6 @@ console.log("Running Rilled!");
         }
 
         return listToUse;
-    }
-
-    function getAngleRange(blob1, blob2, index, radius) {
-        var angleStuff = getEdgeLinesFromPoint(blob1, blob2, radius);
-
-        var leftAngle = angleStuff[0];
-        var rightAngle = rangeToAngle(angleStuff);
-        var difference = angleStuff[1];
-
-        //drawPoint(angleStuff[2][0], angleStuff[2][1], 3, "");
-        //drawPoint(angleStuff[3][0], angleStuff[3][1], 3, "");
-
-        //console.log("Adding badAngles: " + leftAngle + ", " + rightAngle + " diff: " + difference);
-
-        var lineLeft = followAngle(leftAngle, blob1.x, blob1.y, 150 + blob1.size - index * 10);
-        var lineRight = followAngle(rightAngle, blob1.x, blob1.y, 150 + blob1.size - index * 10);
-
-        return [leftAngle, difference];
-    }
-
-    //Given a list of conditions, shift the angle to the closest available spot respecting the range given.
-    function shiftAngle(listToUse, angle, range) {
-        //TODO: shiftAngle needs to respect the range! DONE?
-        for (var i = 0; i < listToUse.length; i++) {
-            if (angleIsWithin(angle, listToUse[i])) {
-                //console.log("Shifting needed!");
-
-                var angle1 = listToUse[i][0];
-                var angle2 = rangeToAngle(listToUse[i]);
-
-                var dist1 = (angle - angle1).mod(360);
-                var dist2 = (angle2 - angle).mod(360);
-
-                if (dist1 < dist2) {
-                    if (angleIsWithin(angle1, range)) {
-                        return angle1;
-                    } else {
-                        return angle2;
-                    }
-                } else {
-                    if (angleIsWithin(angle2, range)) {
-                        return angle2;
-                    } else {
-                        return angle1;
-                    }
-                }
-            }
-        }
-        //console.log("No Shifting Was needed!");
-        return angle;
     }
 
     function findDestination(followMouse) {
@@ -683,38 +544,10 @@ console.log("Running Rilled!");
                         }
                     }
 
-                    for (var i = 0; i < allPossibleViruses.length; i++) {
-                        var virusDistance = computeDistance(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].x, player[k].y);
-                        if (player[k].size < allPossibleViruses[i].size) {
-                            if (virusDistance < (allPossibleViruses[i].size * 2)) {
-                                var tempOb = getAngleRange(player[k], allPossibleViruses[i], i, allPossibleViruses[i].size + 10);
-                                var angle1 = tempOb[0];
-                                var angle2 = rangeToAngle(tempOb);
-                                obstacleList.push([[angle1, true], [angle2, false]]);
-                            }
-                        } else {
-                            if (virusDistance < (player[k].size * 2)) {
-                                var tempOb = getAngleRange(player[k], allPossibleViruses[i], i, player[k].size + 50);
-                                var angle1 = tempOb[0];
-                                var angle2 = rangeToAngle(tempOb);
-                                obstacleList.push([[angle1, true], [angle2, false]]);
-                            }
-                        }
-                    }
-
                     //console.log("Added random noob stuff.");
 
                     var sortedInterList = [];
                     var sortedObList = [];
-
-                    for (var i = 0; i < stupidList.length; i++) {
-                        //console.log("Adding to sorted: " + stupidList[i][0][0] + ", " + stupidList[i][1][0]);
-                        sortedInterList = addAngle(sortedInterList, stupidList[i])
-
-                        if (sortedInterList.length == 0) {
-                            break;
-                        }
-                    }
 
                     for (var i = 0; i < obstacleList.length; i++) {
                         sortedObList = addAngle(sortedObList, obstacleList[i])
@@ -733,9 +566,6 @@ console.log("Running Rilled!");
                     if (sortedObList.length > 0 && sortedObList[0][1]) {
                         obOffsetI = 0;
                     }
-
-                    var destination = followAngle(shiftedAngle, player[k].x, player[k].y, distance);
-
                     destinationChoices.push(destination);
 					
                     tempPoint[2] = 1;
