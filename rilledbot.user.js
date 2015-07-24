@@ -912,7 +912,35 @@ console.log("Running Rilled!");
 
                     //console.log("Done working on blob: " + i);
                 }
+
+                //TODO: Find where to go based on destinationChoices.
+                /*var dangerFound = false;
+                for (var i = 0; i < destinationChoices.length; i++) {
+                    if (destinationChoices[i][2]) {
+                        dangerFound = true;
+                        break;
+                    }
+                }
+
+                destinationChoices.sort(function(a, b){return b[1] - a[1]});
+
+                if (dangerFound) {
+                    for (var i = 0; i < destinationChoices.length; i++) {
+                        if (destinationChoices[i][2]) {
+                            tempMoveX = destinationChoices[i][0][0];
+                            tempMoveY = destinationChoices[i][0][1];
+                            break;
+                        }
+                    }
+                } else {
+                    tempMoveX = destinationChoices.peek()[0][0];
+                    tempMoveY = destinationChoices.peek()[0][1];
+                    //console.log("Done " + tempMoveX + ", " + tempMoveY);
+                }*/
             }
+            //console.log("MOVING RIGHT NOW!");
+
+            //console.log("______Never lied ever in my life.");
 
             return destinationChoices;
         }
