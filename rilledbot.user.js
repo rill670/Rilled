@@ -571,14 +571,7 @@ console.log("Running Rilled!");
 
                     //console.log("Done working on blob: " + i);
                 }
-
-                destinationChoices.sort(function(a, b){return b[1] - a[1]});
-
-                tempMoveX = destinationChoices.peek()[0][0];
-                tempMoveY = destinationChoices.peek()[0][1];
             }
-
-            return destinationChoices;
         }
     }
 
