@@ -9,13 +9,6 @@
 
 var rilledBotVersion = 0.1;
 
-//TODO: Team mode
-//      Detect when people are merging
-//      Split to catch smaller targets
-//      Angle based cluster code
-//      Better wall code
-//      In team mode, make allies be obstacles.
-
 Number.prototype.mod = function(n) {
     return ((this % n) + n) % n;
 };
@@ -66,7 +59,7 @@ function getLatestCommit() {
 getLatestCommit();
 
 console.log("Running Rilled!");
-(function(f, g) {
+function(f, g) {
     var splitDistance = 710;
     console.log("Rilled!");
 
@@ -436,6 +429,12 @@ console.log("Running Rilled!");
         ];
     }
 
+    function invertAngle(range) {
+        var angle1 = rangeToAngle(badAngles[i]);
+        var angle2 = (badAngles[i][0] - angle1).mod(360);
+        return [angle1, angle2];
+    }
+
     function addWall(listToUse, blob) {
         if (blob.x < f.getMapStartX() + 1000) {
             //LEFT
@@ -676,7 +675,15 @@ console.log("Running Rilled!");
 
                         //console.log("Figured out who was important.");
 
-                        if (enemyCanSplit && enemyDistance < splitDangerDistance + shiftDistance) {
+                        if ((enemyCanSplit && enemyDistance < splitDangerDistance) || (enemyCanSplit && allPossibleThreats[i].danger)) {
+
+                            badAngles.push(getAngleRange(player[k], allPossibleThreats[i], i, splitDangerDistance));
+
+                        } else if ((!enemyCanSplit && enemyDistance < normalDangerDistance) || (!enemyCanSplit && allPossibleThreats[i].danger)) {
+
+                            badAngles.push(getAngleRange(player[k], allPossibleThreats[i], i, normalDangerDistance));
+
+                        } else if (enemyCanSplit && enemyDistance < splitDangerDistance + shiftDistance) {
                             var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, splitDangerDistance + shiftDistance);
                             var angle1 = tempOb[0];
                             var angle2 = rangeToAngle(tempOb);
@@ -756,6 +763,17 @@ console.log("Running Rilled!");
                     }
                     if (sortedObList.length > 0 && sortedObList[0][1]) {
                         obOffsetI = 0;
+                    }
+
+                        //console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
+
+                        var distance = computeDistance(player[k].x, player[k].y, clusterAllFood[bestFoodI][0], clusterAllFood[bestFoodI][1]);
+
+                        var shiftedAngle = shiftAngle(obstacleAngles, getAngle(clusterAllFood[bestFoodI][0], clusterAllFood[bestFoodI][1], player[k].x, player[k].y), [0, 360]);
+
+                        var destination = followAngle(shiftedAngle, player[k].x, player[k].y, distance);
+
+                        destinationChoices.push(destination);
                     } else {
                         //If there are no enemies around and no food to eat.
                         destinationChoices.push([tempMoveX, tempMoveY]);
@@ -763,6 +781,22 @@ console.log("Running Rilled!");
                     tempPoint[2] = 1;
 
                     //console.log("Done working on blob: " + i);
+                }
+
+                destinationChoices.sort(function(a, b){return b[1] - a[1]});
+
+                if (dangerFound) {
+                    for (var i = 0; i < destinationChoices.length; i++) {
+                        if (destinationChoices[i][2]) {
+                            tempMoveX = destinationChoices[i][0][0];
+                            tempMoveY = destinationChoices[i][0][1];
+                            break;
+                        }
+                    }
+                } else {
+                    tempMoveX = destinationChoices.peek()[0][0];
+                    tempMoveY = destinationChoices.peek()[0][1];
+                    //console.log("Done " + tempMoveX + ", " + tempMoveY);
                 }
             }
 
