@@ -773,11 +773,8 @@ console.log("Running Rilled!");
 
                         var destination = followAngle(shiftedAngle, player[k].x, player[k].y, distance);
 
-                        destinationChoices.push(destination);
-                    } else {
-                        //If there are no enemies around and no food to eat.
-                        destinationChoices.push([tempMoveX, tempMoveY]);
-                    }
+                    destinationChoices.push(destination);
+					
                     tempPoint[2] = 1;
 
                     //console.log("Done working on blob: " + i);
