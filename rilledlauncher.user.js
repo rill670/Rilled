@@ -773,7 +773,7 @@ console.log("Running Bot Launcher!");
         for (d = 0; d < v.length; d++) v[d].w(f);
         for (d = 0; d < Q.length; d++) Q[d].w(f);
         //UPDATE
-        if (getPlayer().length > 0) {
+        /*if (getPlayer().length > 0) {
             var moveLoc = window.botList[botIndex][1](toggleFollow);
             if (selectedCell > 0) {
                 Aa();
@@ -784,7 +784,7 @@ console.log("Running Bot Launcher!");
                     setPoint(moveLoc[(i + startIndex).mod(getPlayer().length)][0], moveLoc[(i + startIndex).mod(getPlayer().length)][1], (i + startIndex).mod(getPlayer().length));
                 }
             }
-        }
+        }*/
         customRender(f);
         if (Ga) {
             na = (3 *
