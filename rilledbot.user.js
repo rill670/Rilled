@@ -75,6 +75,8 @@ console.log("Running Rilled!");
         }
     }
 
+    f.botList.push(["Rilled " + rilledBotVersion, findDestination]);
+
     var bList = g('#bList');
     g('<option />', {value: (f.botList.length - 1), text: "Rilled"}).appendTo(bList);
 
@@ -242,6 +244,171 @@ console.log("Running Rilled!");
             return coords[1];
         } else {
             return coords[0];
+        }
+    }
+	
+	function findDestination(followMouse) {
+        var player = getPlayer();
+        var interNodes = getMemoryCells();
+
+        if ( /*!toggle*/ 1) {
+            var useMouseX = (getMouseX() - getWidth() / 2 + getX() * getRatio()) / getRatio();
+            var useMouseY = (getMouseY() - getHeight() / 2 + getY() * getRatio()) / getRatio();
+            tempPoint = [useMouseX, useMouseY, 1];
+
+            var tempMoveX = getPointX();
+            var tempMoveY = getPointY();
+
+            var destinationChoices = []; //destination, size, danger
+
+            if (player.length > 0) {
+
+                for (var k = 0; k < player.length; k++) {
+
+                    //console.log("Working on blob: " + k);
+
+                    drawCircle(player[k].x, player[k].y, player[k].size + splitDistance, 5);
+                    //drawPoint(player[0].x, player[0].y - player[0].size, 3, "" + Math.floor(player[0].x) + ", " + Math.floor(player[0].y));
+
+                    //var allDots = processEverything(interNodes);
+
+                    var allIsAll = getAll(player[k]);
+
+                    var allPossibleFood = allIsAll[0];
+                    var allPossibleThreats = allIsAll[1];
+                    var allPossibleViruses = allIsAll[2];
+
+                    var badAngles = [];
+                    var obstacleList = [];
+
+                    var isSafeSpot = true;
+                    var isMouseSafe = true;
+
+                    var clusterAllFood = clusterFood(allPossibleFood, player[k].size);
+
+                    //console.log("Looking for enemies!");
+
+                    for (var i = 0; i < allPossibleThreats.length; i++) {
+
+                        var enemyDistance = computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, player[k].x, player[k].y);
+
+                        var splitDangerDistance = allPossibleThreats[i].size + splitDistance + 150;
+
+                        var normalDangerDistance = allPossibleThreats[i].size + 150;
+
+                        var shiftDistance = player[k].size;
+
+                        //console.log("Found distance.");
+
+                        var enemyCanSplit = canSplit(player[k], allPossibleThreats[i]);
+                        
+                        for (var j = clusterAllFood.length - 1; j >= 0 ; j--) {
+                            var secureDistance = (enemyCanSplit ? splitDangerDistance : normalDangerDistance);
+                            if (computeDistance(allPossibleThreats[i].x, allPossibleThreats[i].y, clusterAllFood[j][0], clusterAllFood[j][1]) < secureDistance)
+                                clusterAllFood.splice(j, 1);
+                        }
+
+                        //console.log("Removed some food.");
+
+                        if (enemyCanSplit) {
+                            drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, splitDangerDistance, 0);
+                            drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, splitDangerDistance + shiftDistance, 6);
+                        } else {
+                            drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, normalDangerDistance, 3);
+                            drawCircle(allPossibleThreats[i].x, allPossibleThreats[i].y, normalDangerDistance + shiftDistance, 6);
+                        }
+
+                        if (allPossibleThreats[i].danger && f.getLastUpdate() - allPossibleThreats[i].dangerTimeOut > 1000) {
+
+                            allPossibleThreats[i].danger = false;
+                        }
+
+                        /*if ((enemyCanSplit && enemyDistance < splitDangerDistance) ||
+                            (!enemyCanSplit && enemyDistance < normalDangerDistance)) {
+
+                            allPossibleThreats[i].danger = true;
+                            allPossibleThreats[i].dangerTimeOut = f.getLastUpdate();
+                        }*/
+
+                        //console.log("Figured out who was important.");
+
+                        if ((enemyCanSplit && enemyDistance < splitDangerDistance) || (enemyCanSplit && allPossibleThreats[i].danger)) {
+
+                            badAngles.push(getAngleRange(player[k], allPossibleThreats[i], i, splitDangerDistance));
+
+                        } else if ((!enemyCanSplit && enemyDistance < normalDangerDistance) || (!enemyCanSplit && allPossibleThreats[i].danger)) {
+
+                            badAngles.push(getAngleRange(player[k], allPossibleThreats[i], i, normalDangerDistance));
+
+                        } else if (enemyCanSplit && enemyDistance < splitDangerDistance + shiftDistance) {
+                            var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, splitDangerDistance + shiftDistance);
+                            var angle1 = tempOb[0];
+                            var angle2 = rangeToAngle(tempOb);
+
+                            obstacleList.push([[angle1, true], [angle2, false]]);
+                        } else if (!enemyCanSplit && enemyDistance < normalDangerDistance + shiftDistance) {
+                            var tempOb = getAngleRange(player[k], allPossibleThreats[i], i, normalDangerDistance + shiftDistance);
+                            var angle1 = tempOb[0];
+                            var angle2 = rangeToAngle(tempOb);
+
+                            obstacleList.push([[angle1, true], [angle2, false]]);
+                        }
+                        //console.log("Done with enemy: " + i);
+                    }
+
+                    //console.log("Done looking for enemies!");
+
+                    var goodAngles = [];
+                    var stupidList = [];
+
+                    for (var i = 0; i < allPossibleViruses.length; i++) {
+                        if (player[k].size < allPossibleViruses[i].size) {
+                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, allPossibleViruses[i].size + 10, 3);
+                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, allPossibleViruses[i].size * 2, 6);
+
+                        } else {
+                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size + 50, 3);
+                            drawCircle(allPossibleViruses[i].x, allPossibleViruses[i].y, player[k].size * 2, 6);
+                        }
+                    }
+
+                    var sortedInterList = [];
+                    var sortedObList = [];
+
+                    for (var i = 0; i < stupidList.length; i++) {
+                        //console.log("Adding to sorted: " + stupidList[i][0][0] + ", " + stupidList[i][1][0]);
+                        sortedInterList = addAngle(sortedInterList, stupidList[i])
+
+                        if (sortedInterList.length == 0) {
+                            break;
+                        }
+                    }
+
+                    for (var i = 0; i < obstacleList.length; i++) {
+                        sortedObList = addAngle(sortedObList, obstacleList[i])
+
+                        if (sortedObList.length == 0) {
+                            break;
+                        }
+                    }
+
+                    var offsetI = 0;
+                    var obOffsetI = 1;
+
+                    if (sortedInterList.length > 0 && sortedInterList[0][1]) {
+                        offsetI = 1;
+                    }
+                    if (sortedObList.length > 0 && sortedObList[0][1]) {
+                        obOffsetI = 0;
+                    }
+
+                    destinationChoices.push([tempMoveX, tempMoveY]);
+
+                    tempPoint[2] = 1;
+
+                }
+
+            return destinationChoices;
         }
     }
 
