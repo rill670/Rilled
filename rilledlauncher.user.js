@@ -781,7 +781,7 @@ console.log("Running Bot Launcher!");
             if (!toggle) {
                 var startIndex = (selectedCell == 0 ? 0 : selectedCell);
                 for (var i = 0; i < getPlayer().length - (selectedCell == 0 ? 0 : 1); i++) {
-                    setPoint(moveLoc[(i + startIndex).mod(getPlayer().length)][0], moveLoc[(i + startIndex).mod(getPlayer().length)][1], (i + startIndex).mod(getPlayer().length));
+                    //setPoint(moveLoc[(i + startIndex).mod(getPlayer().length)][0], moveLoc[(i + startIndex).mod(getPlayer().length)][1], (i + startIndex).mod(getPlayer().length));
                 }
             }
         }
