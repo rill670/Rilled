@@ -428,9 +428,9 @@ console.log("Running Rilled!");
         //drawLine(blob2Left[0], blob2Left[1], tempLine[0], tempLine[1], 0);
 
         if ((blob1Range / blob2Range) > 1) {
-            drawPoint(blob1Left[0], blob1Left[1], 3, "");
-            drawPoint(blob1Right[0], blob1Right[1], 3, "");
-            drawPoint(blob1.x, blob1.y, 3, "" + blob1Range + ", " + blob2Range + " R: " + (Math.round((blob1Range / blob2Range) * 1000) / 1000));
+            //drawPoint(blob1Left[0], blob1Left[1], 3, "");
+            //drawPoint(blob1Right[0], blob1Right[1], 3, "");
+            //drawPoint(blob1.x, blob1.y, 3, "" + blob1Range + ", " + blob2Range + " R: " + (Math.round((blob1Range / blob2Range) * 1000) / 1000));
         }
 
         //drawPoint(blob2.x, blob2.y, 3, "" + blob1Range);
@@ -644,8 +644,8 @@ console.log("Running Rilled!");
         var rightAngle = rangeToAngle(angleStuff);
         var difference = angleStuff[1];
 
-        drawPoint(angleStuff[2][0], angleStuff[2][1], 3, "");
-        drawPoint(angleStuff[3][0], angleStuff[3][1], 3, "");
+        //drawPoint(angleStuff[2][0], angleStuff[2][1], 3, "");
+        //drawPoint(angleStuff[3][0], angleStuff[3][1], 3, "");
 
         //console.log("Adding badAngles: " + leftAngle + ", " + rightAngle + " diff: " + difference);
 
@@ -904,8 +904,8 @@ console.log("Running Rilled!");
 
                         //drawPoint(player[0].x, player[0].y, 2, "");
 
-                        drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
-                        drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
+                        //drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
+                        //drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
                     }
 
                     for (var i = 0; i < obstacleAngles.length; i++) {
@@ -918,8 +918,8 @@ console.log("Running Rilled!");
 
                         //drawPoint(player[0].x, player[0].y, 2, "");
 
-                        drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
-                        drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
+                        //drawPoint(line1[0], line1[1], 0, "" + i + ": 0");
+                        //drawPoint(line2[0], line2[1], 0, "" + i + ": 1");
                     }
 
                     if (followMouse && goodAngles.length == 0) {
@@ -972,7 +972,7 @@ console.log("Running Rilled!");
 
                                 clusterAllFood[i][3] = clusterAngle;
 
-                                drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
+                                //drawPoint(clusterAllFood[i][0], clusterAllFood[i][1], 1, "");
                                 //console.log("After: " + clusterAllFood[i][2]);
                         }
 
@@ -1002,7 +1002,7 @@ console.log("Running Rilled!");
                         destinationChoices.push([tempMoveX, tempMoveY]);
                     }
 
-                    drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
+                    //drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "");
                     //drawPoint(tempPoint[0], tempPoint[1], tempPoint[2], "" + Math.floor(computeDistance(tempPoint[0], tempPoint[1], I, J)));
                     //drawLine(tempPoint[0], tempPoint[1], player[0].x, player[0].y, 6);
                     //console.log("Slope: " + slope(tempPoint[0], tempPoint[1], player[0].x, player[0].y) + " Angle: " + getAngle(tempPoint[0], tempPoint[1], player[0].x, player[0].y) + " Side: " + (getAngle(tempPoint[0], tempPoint[1], player[0].x, player[0].y) - 90).mod(360));
