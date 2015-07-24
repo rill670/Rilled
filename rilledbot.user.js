@@ -59,7 +59,7 @@ function getLatestCommit() {
 getLatestCommit();
 
 console.log("Running Rilled!");
-function(f, g) {
+(function(f, g) {
     var splitDistance = 710;
     console.log("Rilled!");
 
