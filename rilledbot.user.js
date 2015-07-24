@@ -770,17 +770,6 @@ console.log("Running Rilled!");
                     }
                     if (sortedObList.length > 0 && sortedObList[0][1]) {
                         obOffsetI = 0;
-                    }
-
-                        //console.log("Best Value: " + clusterAllFood[bestFoodI][2]);
-
-                        var distance = computeDistance(player[k].x, player[k].y, clusterAllFood[bestFoodI][0], clusterAllFood[bestFoodI][1]);
-
-                        var shiftedAngle = shiftAngle(obstacleAngles, getAngle(clusterAllFood[bestFoodI][0], clusterAllFood[bestFoodI][1], player[k].x, player[k].y), [0, 360]);
-
-                        var destination = followAngle(shiftedAngle, player[k].x, player[k].y, distance);
-
-                        destinationChoices.push(destination);
                     } else {
                         //If there are no enemies around and no food to eat.
                         destinationChoices.push([tempMoveX, tempMoveY]);
