@@ -566,7 +566,6 @@ console.log("Running Rilled!");
                     if (sortedObList.length > 0 && sortedObList[0][1]) {
                         obOffsetI = 0;
                     }
-                    destinationChoices.push(destination);
 					
                     tempPoint[2] = 1;
 
